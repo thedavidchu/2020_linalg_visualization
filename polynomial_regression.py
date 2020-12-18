@@ -71,7 +71,7 @@ def polynomial_regression(X, Y, N: int = 1, plot: bool = False):
         
         print(f'Approximation = {y}')                       # Display text solution
         
-        x_soln = np.linspace(np.amin(x), np.amax(x), 100)   # Compute numeric solution
+        x_soln = np.linspace(np.amin(X), np.amax(X), 100)   # Compute numeric solution
         y_soln = (lambdify(x, y))(x_soln)                   # Call f(x_soln), where f = lambdify(x, y) = ax^N + bx^N-1 + cx^N-2 + ...
         
         # Plot solution and original data
@@ -105,4 +105,4 @@ if __name__ == '__main__':
         x = z[:, 0]
         y = z[:, 1]
     
-    soln = linear_regression(x, y, N = 2, plot=True)
+    soln = polynomial_regression(x, y, N = 1, plot=True)
