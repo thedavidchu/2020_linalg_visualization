@@ -2,17 +2,28 @@
 # polynomial_regression.py
 
 ## Functionality
-Find the linear (or higher order) regression of an input (x) and output (y).
+Find the linear (or higher order) regression of an input (X) and output (Y).
 
 - Example 1:
     > Problem 6.1 from Optimization Models by Giuseppe Calafiore and Laurent El Ghaoui.
 
 - Example 2:
     > Numbers derived from https://keisan.casio.com/exec/system/14059932254941
+    
+This code is not intended for performance; rather it is purely illustrative and educational. 
+Refer to the SciPy library for a presumably cleaner and more powerful implementation. 
 
 ## TODO
 - Clean code to make variables' purpose more transparent
+- Allow certain variables to be set to zero
+    i.e. the model assumes the form Y = aX + b, but sometimes we want b = 0
+- Error test. Code changed on 2020-12-20, but no testing was done
+
+## Not Implemented
+The function _polynomial\_regression_ returns a list of coefficients rather than the SymPy object containing the formula. 
+I am trying to illustrate the use of matrices to compute these problems.
 """
+
 
 import numpy as np
 import sympy as sp
@@ -28,8 +39,9 @@ def polynomial_regression(X, Y, N: int = 1, plot: bool = False):
 
     :param X: input X, 1D np.array - data input
     :param Y: input Y, 1D np.array - data output (the output from the system)
-    :param N: int - order of fit
+    :param N: int - the order of polynomial that we want to fit
     :param plot: bool - whether to plot results or not
+    
     :return: Output of coefficients
         - [[a, b, c, ...]].T where Y ~= ax^N + bx^N-1 + cx^N-2 + ...
     """
@@ -38,7 +50,7 @@ def polynomial_regression(X, Y, N: int = 1, plot: bool = False):
     assert isinstance(X, np.ndarray)                            # Assert NumPy functionality
     assert isinstance(Y, np.ndarray)
     assert isinstance(N, int)                                   # Assert int type
-    assert X.size != Y.size                                     # This should be an assertion
+    assert X.size == Y.size                                     # Assert that we have same number of data points
 
     n = Y.size
     Y = Y.reshape(n, 1)
@@ -70,7 +82,7 @@ def polynomial_regression(X, Y, N: int = 1, plot: bool = False):
         y = 0
         for i in range(N + 1):                              # Set y = ax^N + bx^N-1 + cx^N-2 + ...
             y += soln[i, 0] * x**(N-i)
-        print(f'Approximation = {y}')                       # Display text solution
+        print(f'Approximation: y = {y}')                       # Display text solution
         x_soln = np.linspace(np.amin(X), np.amax(X), 100)   # Compute numeric solution
         y_soln = (lambdify(x, y))(x_soln)                   # Call f(x_soln), where f = lambdify(x, y) = ax^N + bx^N-1 + cx^N-2 + ...
         
@@ -98,14 +110,16 @@ if __name__ == '__main__':
             Forces: X = [-1, 0, 1, 2]
         These will yield a corresponding output of displacement
             Displacement: Y = [0, 0, 1, 1]
-        The goal is to find the best fit for this model.
+        The goal is to find the best linear fit for this model (we know it will be linear by Hooke's Law)
+        Note: the model assumes we are trying to fit Y = aX + b; Hooke's Law implies that b = 0, since there is no displacement when there is no force. This will lead to an obvious error.
         
     - Example 2:
+        You are given a list of points in (X, Y)-coordinates to plot a parabola.
         
     """
     
     # This is why I wish Python had a switch/case syntax outside of a dictionary
-    case = 1
+    case = 2
     
     # Example 1:
     if case == 1:
