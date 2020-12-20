@@ -1,5 +1,5 @@
 """
-# lin_reg.py
+# polynomial_regression.py
 
 ## Functionality
 Find the linear (or higher order) regression of an input (x) and output (y).
@@ -34,9 +34,11 @@ def polynomial_regression(X, Y, N: int = 1, plot: bool = False):
         - [[a, b, c, ...]].T where Y ~= ax^N + bx^N-1 + cx^N-2 + ...
     """
 
-    if X.size != Y.size:                                        # This should be an assertion
-        print(f'Wrong Lengths. X = {X.size}, Y = {Y.size}')     # This should be a warning/ assertion/ error
-        return False
+    # Error Checking
+    assert isinstance(X, np.ndarray)                            # Assert NumPy functionality
+    assert isinstance(Y, np.ndarray)
+    assert isinstance(N, int)                                   # Assert int type
+    assert X.size != Y.size                                     # This should be an assertion
 
     n = Y.size
     Y = Y.reshape(n, 1)
@@ -68,9 +70,7 @@ def polynomial_regression(X, Y, N: int = 1, plot: bool = False):
         y = 0
         for i in range(N + 1):                              # Set y = ax^N + bx^N-1 + cx^N-2 + ...
             y += soln[i, 0] * x**(N-i)
-        
         print(f'Approximation = {y}')                       # Display text solution
-        
         x_soln = np.linspace(np.amin(X), np.amax(X), 100)   # Compute numeric solution
         y_soln = (lambdify(x, y))(x_soln)                   # Call f(x_soln), where f = lambdify(x, y) = ax^N + bx^N-1 + cx^N-2 + ...
         
@@ -88,8 +88,20 @@ def polynomial_regression(X, Y, N: int = 1, plot: bool = False):
     
 if __name__ == '__main__':
     """
-    x = x-coordinates
-    y = y-cooridnates
+    X = x-coordinates (i.e. data into the system)
+    Y = y-cooridnates (i.e. data out of the system)
+    
+    X -> [SYSTEM] -> Y
+    
+    - Example 1:
+        You are given a various forces in Newtons on a spring
+            Forces: X = [-1, 0, 1, 2]
+        These will yield a corresponding output of displacement
+            Displacement: Y = [0, 0, 1, 1]
+        The goal is to find the best fit for this model.
+        
+    - Example 2:
+        
     """
     
     # This is why I wish Python had a switch/case syntax outside of a dictionary
@@ -97,12 +109,14 @@ if __name__ == '__main__':
     
     # Example 1:
     if case == 1:
-        x = np.array([[-1, 0, 1, 2]]).T
-        y = np.array([[0, 0, 1, 1]]).T
+        X = np.array([[-1, 0, 1, 2]]).T
+        Y = np.array([[0, 0, 1, 1]]).T
+        N = 1
     # Example 2:
     elif case == 2:
         z = np.array([[83,183],[71,168],[64,171],[69,178],[69,176],[64,172],[68,165],[59,158],[81,183],[91,182],[57,163],[65,175],[58,164],[62,175]])
-        x = z[:, 0]
-        y = z[:, 1]
+        X = z[:, 0]
+        Y = z[:, 1]
+        N = 2
     
-    soln = polynomial_regression(x, y, N = 1, plot=True)
+    soln = polynomial_regression(X=X, Y=Y, N=N, plot=True)
