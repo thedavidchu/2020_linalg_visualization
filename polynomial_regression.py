@@ -36,13 +36,15 @@ def polynomial_regression(X, Y, N: int = 1, plot: bool = False):
     Regression for polynomial system of order N, given data input X and data output Y for system:
     
     X -> [SYSTEM] -> Y
+    
+    We are trying to model Y with the best polynomial fit (minimize residual) of a given order N.
 
-    :param X: input X, 1D np.array - data input
-    :param Y: input Y, 1D np.array - data output (the output from the system)
+    :param X: input X, 1D np.ndarray - data input (the input to the system)
+    :param Y: input Y, 1D np.ndarray - data output (the output from the system)
     :param N: int - the order of polynomial that we want to fit
     :param plot: bool - whether to plot results or not
     
-    :return: Output of coefficients
+    :return: np.ndarray - Output of coefficients
         - [[a, b, c, ...]].T where Y ~= ax^N + bx^N-1 + cx^N-2 + ...
     """
 
@@ -105,16 +107,20 @@ if __name__ == '__main__':
     
     X -> [SYSTEM] -> Y
     
+    We want to model this system with the order-N polynomial that will reduce residuals most.
+    
     - Example 1:
-        You are given a various forces in Newtons on a spring
-            Forces: X = [-1, 0, 1, 2]
-        These will yield a corresponding output of displacement
-            Displacement: Y = [0, 0, 1, 1]
-        The goal is to find the best linear fit for this model (we know it will be linear by Hooke's Law)
-        Note: the model assumes we are trying to fit Y = aX + b; Hooke's Law implies that b = 0, since there is no displacement when there is no force. This will lead to an obvious error.
+        > You are given a various forces in Newtons on a spring
+            >> Forces: X = [-1, 0, 1, 2]
+        > These will yield a corresponding output of displacement
+            >> Displacement: Y = [0, 0, 1, 1]
+        > The goal is to find the best linear fit for this model (we know it will be linear by Hooke's Law)
+        
+        > Note: the model assumes we are trying to fit Y = aX + b; Hooke's Law implies that b = 0, since there is no displacement when there is no force. 
+        > This will lead to an obvious error.
         
     - Example 2:
-        You are given a list of points in (X, Y)-coordinates to plot a parabola.
+        > You are given a list of points in (X, Y)-coordinates to plot a parabola.
         
     """
     
