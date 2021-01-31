@@ -44,36 +44,37 @@ def plot(trn_loss, trn_acc, trn_batch_per_epoch=1,
 
     :return: None
     """
+
     # Plot Expanded Nodes
     fig, axs = plt.subplots(1, 2)
     fig.canvas.set_window_title(figure)
     fig.suptitle(title)
 
-    trn_x = np.linspace(0, len(trn_loss)//trn_batch_per_epoch, len(trn_loss))
-    val_x = np.linspace(0, len(val_loss)//val_batch_per_epoch, len(val_loss))
-    tst_x = np.linspace(0, len(tst_loss)//tst_batch_per_epoch, len(tst_loss))
+    trn_x = np.linspace(0, (len(trn_loss) - 1)/trn_batch_per_epoch, len(trn_loss))
+    val_x = np.linspace(0, (len(val_loss) - 1)/val_batch_per_epoch, len(val_loss))
+    tst_x = np.linspace(0, (len(tst_loss) - 1)/tst_batch_per_epoch, len(tst_loss))
 
     # Plot loss
-    axs[0].set_title(f'Loss vs Epoch')
-    axs[0].set_xlabel('Epoch')
-    axs[0].set_ylabel('Loss')
     axs[0].plot(trn_x, trn_loss, 'g', label='Training')
-    axs[0].legend(loc='upper right')
     if val_loss is not None:    # Plot validation loss if applicable
         axs[0].plot(val_x, val_loss, 'r', label='Validation')
     if tst_loss is not None:    # Plot test loss if applicable
         axs[0].plot(tst_x, tst_loss, 'k', label='Test')
+    axs[0].set_title(f'Loss vs Epoch')
+    axs[0].set_xlabel('Epoch')
+    axs[0].set_ylabel('Loss')
+    axs[0].legend(loc='upper right')
 
     # Plot accuracy
-    axs[1].set_title(f'Accuracy vs Epoch')
-    axs[1].set_xlabel('Epoch')
-    axs[1].set_ylabel('Accuracy')
-    axs[1].legend(loc='upper right')
     axs[1].plot(trn_x, trn_acc, 'g', label='Training')
     if val_acc is not None:     # Plot validation accuracy if applicable
         axs[1].plot(val_x, val_acc, 'r', label='Validation')
     if tst_acc is not None:     # Plot test accuracy if applicable
         axs[1].plot(tst_x, tst_acc, 'k', label='Test')
+    axs[1].set_title(f'Accuracy vs Epoch')
+    axs[1].set_xlabel('Epoch')
+    axs[1].set_ylabel('Accuracy')
+    axs[1].legend(loc='lower right')
 
     plt.show()
     return
