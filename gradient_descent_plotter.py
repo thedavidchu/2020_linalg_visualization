@@ -100,6 +100,21 @@ def plot(trn_loss=None, trn_acc=None, trn_batch_per_epoch=1,
     return
 
 
+# def save(obj, file_name):
+#     """
+#     Pickle the object into <file_name>.pkl.
+#
+#     :param obj: object to save
+#     :param file_name: str - file name
+#     :return: None
+#     """
+#     import pickle
+#     with open(f'{file_name}.pkl', 'wb') as f:
+#         pickle.dump(obj, f)
+#
+#     return
+
+
 if __name__ == '__main__':
     pass
     
