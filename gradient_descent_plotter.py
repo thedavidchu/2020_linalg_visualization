@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def plot(trn_loss, trn_acc, trn_batch_per_epoch=1,
+def plot(trn_loss=None, trn_acc=None, trn_batch_per_epoch=1,
          val_loss=None, val_acc=None, val_batch_per_epoch=1,
          tst_loss=None, tst_acc=None, tst_batch_per_epoch=1,
          title='Loss and Accuracy Plot', figure='Loss and Accuracy Plot'):
@@ -22,6 +22,7 @@ def plot(trn_loss, trn_acc, trn_batch_per_epoch=1,
 
     Assumption:
         - sample loss and accuracy at the same rate
+        - we are plotting at least one loss and one accuracy
 
     # Training loss and accuracy
     :param trn_loss: list - training loss by epoch
@@ -50,12 +51,25 @@ def plot(trn_loss, trn_acc, trn_batch_per_epoch=1,
     fig.canvas.set_window_title(figure)
     fig.suptitle(title)
 
-    trn_x = np.linspace(0, (len(trn_loss) - 1)/trn_batch_per_epoch, len(trn_loss))
-    val_x = np.linspace(0, (len(val_loss) - 1)/val_batch_per_epoch, len(val_loss))
-    tst_x = np.linspace(0, (len(tst_loss) - 1)/tst_batch_per_epoch, len(tst_loss))
+    # Space out training x-axis
+    if trn_loss is not None:
+        trn_x = np.linspace(0, (len(trn_loss) - 1)/trn_batch_per_epoch, len(trn_loss))
+    elif trn_acc is not None:
+        trn_x = np.linspace(0, (len(trn_acc) - 1) / trn_batch_per_epoch, len(trn_acc))
+    # Space out validation x-axis
+    if val_loss is not None:
+        val_x = np.linspace(0, (len(val_loss) - 1)/val_batch_per_epoch, len(val_loss))
+    elif val_acc is not None:
+        val_x = np.linspace(0, (len(val_acc) - 1) / val_batch_per_epoch, len(val_acc))
+    # Space out testing x-axis
+    if tst_loss is not None:
+        tst_x = np.linspace(0, (len(tst_loss) - 1)/tst_batch_per_epoch, len(tst_loss))
+    elif tst_acc is not None:
+        tst_x = np.linspace(0, (len(tst_acc) - 1) / tst_batch_per_epoch, len(tst_acc))
 
     # Plot loss
-    axs[0].plot(trn_x, trn_loss, 'g', label='Training')
+    if trn_loss is not None:
+        axs[0].plot(trn_x, trn_loss, 'g', label='Training')
     if val_loss is not None:    # Plot validation loss if applicable
         axs[0].plot(val_x, val_loss, 'r', label='Validation')
     if tst_loss is not None:    # Plot test loss if applicable
@@ -66,7 +80,8 @@ def plot(trn_loss, trn_acc, trn_batch_per_epoch=1,
     axs[0].legend(loc='upper right')
 
     # Plot accuracy
-    axs[1].plot(trn_x, trn_acc, 'g', label='Training')
+    if trn_acc is not None:
+        axs[1].plot(trn_x, trn_acc, 'g', label='Training')
     if val_acc is not None:     # Plot validation accuracy if applicable
         axs[1].plot(val_x, val_acc, 'r', label='Validation')
     if tst_acc is not None:     # Plot test accuracy if applicable
